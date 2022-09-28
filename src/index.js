@@ -5,8 +5,13 @@ import App from './App';
 import { Provider } from 'react-redux';
 import store from './store/store'
 import reportWebVitals from './reportWebVitals';
+import {axiosErrorInterceptor} from "./services/errorHandler";
+import axios from "axios";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+axiosErrorInterceptor(axios);
+
 root.render(
   <Provider store={store}>
     <React.StrictMode>

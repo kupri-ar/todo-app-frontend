@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import api from "../../services/api";
-import {setAccessToken} from "../../services/localStorage";
+import {clearAccessToken, setAccessToken} from "../../services/localStorage";
 import {useDispatch, useSelector} from "react-redux";
 import {setCurrentUser} from "../../store/UserData.reducer";
 import Button from "../Button/Button.component";
@@ -16,7 +16,7 @@ const Header = () => {
 
   const logOut = async () => api.logout().then((resp) => {
     dispatch(setCurrentUser(null))
-    setAccessToken(null);
+    clearAccessToken();
   });
 
   return (
