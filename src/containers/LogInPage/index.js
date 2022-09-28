@@ -1,0 +1,1 @@
+export { default as TodoListTable } from '../../containers/MainPage/MainPage.component';
