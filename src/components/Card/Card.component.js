@@ -1,5 +1,6 @@
-import { memo } from "react";
+import {memo} from "react";
 import classnames from "classnames";
+import {useSelector} from "react-redux";
 
 const Card = ({
   id,
@@ -9,28 +10,37 @@ const Card = ({
   isEdited,
   isDone,
   setDone,
+  editCard,
 }) => {
-  const isAdmin = false;
+  const currentUser =  useSelector((state) => state.userData)
 
   return (
     <div className={classnames('flex flex-col p-3 m-3', {
-      'bg-amber-200': isAdmin,
-      'bg-gray-200': !isAdmin,
+      'bg-amber-200': !isDone,
+      'bg-gray-200': isDone,
     })}>
 
       <div className='flex justify-between m-2'>
         <div className='font-semibold'>{name}</div>
-        <div>
-          <span className='ml-2'>edit</span>
-          {!isDone && (
-            <span
+
+        {currentUser.user && (
+          <div>
+            <button
               className='ml-2'
-              onClick={() => setDone(id)}
+              onClick={() => editCard(id)}
             >
-            done
-          </span>
-          )}
-        </div>
+              🖊️
+            </button>
+            {!isDone && (
+              <button
+                className='ml-2'
+                onClick={() => setDone(id)}
+              >
+                ✔️
+            </button>
+            )}
+          </div>
+        )}
       </div>
 
       <div className='flex justify-between m-2'>
@@ -41,11 +51,14 @@ const Card = ({
         <div className=''>{content}</div>
       </div>
 
+      <div className='flex justify-end'>
       {isEdited && (
-        <div className='flex justify-end'>
-          <div className='text-gray-400'>edited</div>
-        </div>
+          <div className='text-gray-400 px-1'>edited</div>
       )}
+      {isDone && (
+          <div className='text-gray-400 px-1'>done</div>
+      )}
+      </div>
 
     </div>
   );

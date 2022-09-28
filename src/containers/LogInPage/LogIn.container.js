@@ -2,14 +2,15 @@ import { Formik } from "formik";
 import LogInComponent from "./LogIn.component";
 import LogInSchema from "./LogIn.schema";
 import api from "../../services/api";
-import {AppContext} from "../../App";
 import {useNavigate} from "react-router";
-import {useContext} from "react";
 import {setAccessToken} from "../../services/localStorage";
+import {useDispatch, useSelector} from "react-redux";
+import {setCurrentUser} from "../../store/UserData.reducer";
 
 const LogInPage = () => {
 
-  const { currentUser, setCurrentUser } = useContext(AppContext);
+  const { user } = useSelector((state) => state.userData)
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const initialState = {
@@ -21,9 +22,8 @@ const LogInPage = () => {
     try {
       form.setStatus({loading: true});
       await api.login(values.username, values.password).then((resp) => {
-        // setCurrentUser(resp.data.user);
-        setCurrentUser({ username: 'name' });
-        setAccessToken(resp.data.access_token);
+        dispatch(setCurrentUser(resp.data))
+        setAccessToken(resp.headers.authorization);
       });
       form.setStatus({loading: false});
     } catch (err) {
@@ -34,7 +34,7 @@ const LogInPage = () => {
     }
   }
 
-  if (currentUser) navigate({ pathname: '/' })
+  if (user) navigate({ pathname: '/' })
 
   return (
     <Formik

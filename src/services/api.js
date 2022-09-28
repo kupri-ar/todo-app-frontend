@@ -5,7 +5,7 @@ import {getAccessToken} from "./localStorage";
 export default  {
   login(username, password) {
     return axios.post(
-      `${API_HOST}/admin/login`,
+      `${API_HOST}/api/login`,
       {
         username, password
       }
@@ -13,39 +13,45 @@ export default  {
   },
   logout() {
     return axios.get(
-      `${API_HOST}/admin/logout`,
+      `${API_HOST}/api/logout`,
       {
-        headers: {Authorization: `Bearer ${getAccessToken()}`}
+        headers: {Authorization: getAccessToken()}
       },
     );
   },
   getTodos(page = 1, order_by = null, order_desc = false, per_page = 3) {
     return axios.get(
-      `${API_HOST}/todo/`,
+      `${API_HOST}/api/todo/`,
       {
         params: {
           page,
           per_page,
           order_by,
-          order_desc,
+          desc_order: order_desc || undefined,
         }
       }
     );
   },
   createTodo(body) {
     return axios.post(
-      `${API_HOST}/todo/`,
-      {
-        body: body
-      }
+      `${API_HOST}/api/todo/`,
+      body
     );
   },
   updateTodo(body) {
     return axios.put(
-      `${API_HOST}/todo/`,
+      `${API_HOST}/api/todo/`,
+      body,
       {
-        headers: {Authorization: `Bearer ${getAccessToken()}`},
-        body: body
+        headers: {Authorization: getAccessToken()},
+      }
+    );
+  },
+  getUser() {
+    return axios.get(
+      `${API_HOST}/api/user`,
+      {
+        headers: {Authorization: getAccessToken()},
       }
     );
   },

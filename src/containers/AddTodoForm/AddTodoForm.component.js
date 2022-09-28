@@ -1,6 +1,7 @@
-import { Form } from "formik";
+import {ErrorMessage, Form} from "formik";
 import classnames from "classnames";
 import FormikInput from "../../components/FormikInput/FormikInput.component";
+import Button from "../../components/Button/Button.component";
 
 const AddTodoFormComponent = ({
   ...props
@@ -29,21 +30,19 @@ const AddTodoFormComponent = ({
         classNames={{ label: "text-[14px] font-semibold mb-2" }}
       />
       <div className="flex flex-col justify-center items-center   mb-7 mt-4 px-4">
-        <button
+        <Button
           disabled={props.status?.loading}
           type="submit"
-          className={classnames(
-            "bg-blue-400 py-1 px-3 ml-1 rounded-md",
-            { "pointer-events-none": props.status?.loading }
-          )}
         >
           {!props.status?.loading ? (
             "Save"
           ) : (
             "Loading..."
           )}
-        </button>
+        </Button>
+
       </div>
+      <div className="text-red-700">{props.status?.error}</div>
     </Form>
   );
 }

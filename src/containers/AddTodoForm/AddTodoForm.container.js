@@ -1,16 +1,13 @@
 import { Formik } from "formik";
 import api from "../../services/api";
-import {AppContext} from "../../App";
-import {useNavigate} from "react-router";
-import {useContext} from "react";
-import {setAccessToken} from "../../services/localStorage";
 import AddTodoSchema from "./AddTodo.schema";
 import AddTodoFormComponent from "./AddTodoForm.component";
+import {useDispatch, useSelector} from "react-redux";
+import {addTodo, setPageCount, updateTodo} from "../../store/Todo.reducer";
 
-const AddTodoForm = ({ todoItem }) => {
-
-  const { currentUser, setCurrentUser } = useContext(AppContext);
-  const navigate = useNavigate();
+const AddTodoForm = ({ todoItem, close }) => {
+  const { page, sortCol, sortDesc } = useSelector((state) => state.todoList)
+  const dispatch = useDispatch();
 
   const initialState = todoItem || {
     name: '',
@@ -21,21 +18,33 @@ const AddTodoForm = ({ todoItem }) => {
   const onSubmit = async(values, form) => {
     try {
       form.setStatus({loading: true});
-      await api.login(values.username, values.password).then((resp) => {
-        // setCurrentUser(resp.data.user);
-        setCurrentUser({ username: 'name' });
-        setAccessToken(resp.data.access_token);
-      });
+      if (!todoItem) {
+        await api.createTodo(values).then(async (resp) => {
+          await api.getTodos(page, sortCol, !!sortDesc).then((resp) => {
+            dispatch(setPageCount(resp.headers['x-pagination-page-count']));
+          });
+          dispatch(addTodo(resp.data))
+
+          close();
+        });
+      } else {
+        await api.updateTodo(values).then((resp) => {
+          dispatch(updateTodo(resp.data))
+          close();
+        });
+      }
       form.setStatus({loading: false});
     } catch (err) {
       if (err?.message) {
-        form.setFieldError('username', err?.message);
+        console.log(err)
+        if (err.response.status === 401) {
+          form.setStatus({error: 'Authorization needed'})
+        }
+        form.setFieldError('email', err.response.data.data.email[0]);
       }
       form.setStatus({loading: false});
     }
   }
-
-  if (currentUser) navigate({ pathname: '/' })
 
   return (
     <Formik

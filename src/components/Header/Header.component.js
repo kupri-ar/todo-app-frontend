@@ -1,20 +1,21 @@
-import { useContext } from "react";
-import { AppContext } from "../../App";
 import { useNavigate } from "react-router";
 import api from "../../services/api";
 import {setAccessToken} from "../../services/localStorage";
+import {useDispatch, useSelector} from "react-redux";
+import {setCurrentUser} from "../../store/UserData.reducer";
+import Button from "../Button/Button.component";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser } = useContext(AppContext);
+  const { user } =  useSelector((state) => state.userData)
+  const dispatch = useDispatch();
 
   const goToLogInPage = () => navigate({ pathname: '/login' });
 
   const goToMainPage = () => navigate({ pathname: '/' });
 
   const logOut = async () => api.logout().then((resp) => {
-    // setCurrentUser(resp.data.user);
-    setCurrentUser(null);
+    dispatch(setCurrentUser(null))
     setAccessToken(null);
   });
 
@@ -24,19 +25,18 @@ const Header = () => {
         TestApp
       </div>
 
-      {currentUser ? (
+      {user ? (
         <div className='flex items-center'>
-          <div className='font-semibold mx-3'>{currentUser.username}</div>
-          <button className='bg-blue-400 py-1 px-3 ml-1 rounded-md' onClick={logOut}>Log Out</button>
+          <div className='font-semibold mx-3'>{user.username}</div>
+          <Button onClick={logOut}>Log Out</Button>
         </div>
       ) : (
         <div className='flex items-center'>
-          <button
+          <Button
             onClick={goToLogInPage}
-            className='bg-blue-400 py-1 px-3 ml-1 rounded-md'
           >
             Log In
-          </button>
+          </Button>
         </div>
       )}
 

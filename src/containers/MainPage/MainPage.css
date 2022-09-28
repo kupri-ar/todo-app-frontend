@@ -23,3 +23,44 @@
     justify-content: center;
     align-items: center;
 }
+
+.pagination {
+    justify-content: center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+ul.pagination li {
+    padding-right: 5px;
+    padding-left: 5px;
+    justify-content: center;
+}
+
+ul.pagination li a {
+    text-decoration: none;
+    color: #337ab7;
+    font-size: 20px;
+}
+
+ul.pagination li.active a {
+    color: white;
+}
+ul.pagination li.active {
+    background-color: #337ab7;
+}
+
+ul.pagination li a:hover,
+ul.pagination li a.active {
+    color: blue;
+}
+
+.page-selection {
+    width: 48px;
+    height: 30px;
+    color: #337ab7;
+}
