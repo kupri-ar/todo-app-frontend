@@ -1,1 +1,1 @@
-export { default as Card } from './Card.component';
+export { default as AddTodoForm } from './AddTodoForm.container';

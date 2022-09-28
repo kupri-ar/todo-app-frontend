@@ -1,8 +1,9 @@
 import * as yup from "yup";
 
-const LogInSchema = yup.object().shape({
-  username: yup.string().required("Username is required!"),
-  password: yup.string().required("Password is required!"),
+const AddTodoSchema = yup.object().shape({
+  name: yup.string().required("Name is required!"),
+  email: yup.string().required("Email is required!"),
+  content: yup.string().required("Content is required!"),
 });
 
-export default LogInSchema;
+export default AddTodoSchema;

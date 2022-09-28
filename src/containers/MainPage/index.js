@@ -1,1 +1,1 @@
-export { default as LogInPage } from './LogIn.container';
+export { default as MainPage } from './MainPage.container';

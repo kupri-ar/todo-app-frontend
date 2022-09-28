@@ -1,1 +1,1 @@
-export { default as TodoListTable } from '../../containers/MainPage/MainPage.component';
+export { default as LogInPage } from './LogIn.container';

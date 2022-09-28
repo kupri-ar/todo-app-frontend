@@ -1,1 +1,1 @@
-export { default as FormInput } from './FormikInput.component';
+export { default as Card } from './Card.component';

@@ -1,13 +1,7 @@
-import axios from 'axios';
-import { API_HOST } from '../config';
+export const setAccessToken = (token) => {
+  localStorage.setItem('access_token', token);
+}
 
-export default  {
-  login(username, password) {
-    return axios.post(
-      `${API_HOST}/admin/login`,
-      {
-        username, password
-      }
-    );
-  },
-};
+export const getAccessToken = () => {
+  return localStorage.getItem('access_token');
+}

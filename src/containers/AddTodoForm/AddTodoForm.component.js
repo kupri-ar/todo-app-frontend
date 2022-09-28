@@ -1,54 +1,51 @@
-import { memo } from "react";
+import { Form } from "formik";
 import classnames from "classnames";
+import FormikInput from "../../components/FormikInput/FormikInput.component";
 
-const Card = ({
-  id,
-  name,
-  email,
-  content,
-  isEdited,
-  isDone,
-  setDone,
+const AddTodoFormComponent = ({
+  ...props
 }) => {
-  const isAdmin = false;
 
   return (
-    <div className={classnames('flex flex-col p-3 m-3', {
-      'bg-amber-200': isAdmin,
-      'bg-gray-200': !isAdmin,
-    })}>
-
-      <div className='flex justify-between m-2'>
-        <div className='font-semibold'>{name}</div>
-        <div>
-          <span className='ml-2'>edit</span>
-          {!isDone && (
-            <span
-              className='ml-2'
-              onClick={() => setDone(id)}
-            >
-            done
-          </span>
+    <Form
+      className={classnames("flex flex-col ", props.className)}
+    >
+      <FormikInput
+        name='name'
+        placeholder="Name"
+        label="Name"
+        classNames={{ label: "text-[14px] font-semibold mb-2" }}
+      />
+      <FormikInput
+        name='email'
+        placeholder="Email"
+        label="Email"
+        classNames={{ label: "text-[14px] font-semibold mb-2" }}
+      />
+      <FormikInput // todo: make it textarea
+        name='content'
+        placeholder="Content"
+        label="Content"
+        classNames={{ label: "text-[14px] font-semibold mb-2" }}
+      />
+      <div className="flex flex-col justify-center items-center   mb-7 mt-4 px-4">
+        <button
+          disabled={props.status?.loading}
+          type="submit"
+          className={classnames(
+            "bg-blue-400 py-1 px-3 ml-1 rounded-md",
+            { "pointer-events-none": props.status?.loading }
           )}
-        </div>
+        >
+          {!props.status?.loading ? (
+            "Save"
+          ) : (
+            "Loading..."
+          )}
+        </button>
       </div>
-
-      <div className='flex justify-between m-2'>
-        <div className='font-semibold'>{email}</div>
-      </div>
-
-      <div className='flex m-2'>
-        <div className=''>{content}</div>
-      </div>
-
-      {isEdited && (
-        <div className='flex justify-end'>
-          <div className='text-gray-400'>edited</div>
-        </div>
-      )}
-
-    </div>
+    </Form>
   );
 }
 
-export default memo(Card);
+export default AddTodoFormComponent;

@@ -1,57 +1,48 @@
-import {Form, Formik} from "formik";
-import classnames from "classnames";
-import FormikInput from "../../components/FormikInput/FormikInput.component";
+import { Formik } from "formik";
+import LogInComponent from "./LogIn.component";
+import LogInSchema from "./LogIn.schema";
+import api from "../../services/api";
+import {AppContext} from "../../App";
+import {useNavigate} from "react-router";
+import {useContext} from "react";
+import {setAccessToken} from "../../services/localStorage";
 
 const LogInPage = () => {
+
+  const { currentUser, setCurrentUser } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const initialState = {
     username: '',
     password: '',
   }
 
-  const onSubmit = () => {
-
+  const onSubmit = async(values, form) => {
+    try {
+      form.setStatus({loading: true});
+      await api.login(values.username, values.password).then((resp) => {
+        // setCurrentUser(resp.data.user);
+        setCurrentUser({ username: 'name' });
+        setAccessToken(resp.data.access_token);
+      });
+      form.setStatus({loading: false});
+    } catch (err) {
+      if (err?.message) {
+        form.setFieldError('username', err?.message);
+      }
+      form.setStatus({loading: false});
+    }
   }
+
+  if (currentUser) navigate({ pathname: '/' })
 
   return (
     <Formik
       initialValues={initialState}
-      validationSchema={validationSchema()}
+      validationSchema={LogInSchema}
       onSubmit={onSubmit}
     >
-      <Form
-        className={classnames("flex flex-col ", props.className)}
-      >
-        <FormikInput
-          name='username'
-          placeholder="Username"
-          label="Username"
-          classNames={{ label: "text-[14px] font-semibold mb-2" }}
-        />
-        <FormikInput
-          name='password'
-          type="password"
-          placeholder="Password"
-          label="Password"
-          className="mt-4"
-          classNames={{ label: "text-[14px] font-semibold mb-2" }}
-        />
-        <div className="flex flex-col justify-center items-center   mb-7 mt-4 px-4">
-          <button
-            disabled={props.status?.loading}
-            className={classnames(
-              " bg-[#00649C] w-[159px] h-[40px] text-white items-center rounded-md justify-around",
-              { "pointer-events-none": props.status?.loading }
-            )}
-          >
-            {!props.status?.loading ? (
-              "Login"
-            ) : (
-              <Rings color="#00BFFF" height={35} width={35} />
-            )}
-          </button>
-        </div>
-      </Form>
+      {(props) => <LogInComponent {...props} />}
     </Formik>
   );
 }
