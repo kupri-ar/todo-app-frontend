@@ -36,10 +36,6 @@ const AddTodoForm = ({ todoItem, close }) => {
       form.setStatus({loading: false});
     } catch (err) {
       if (err?.message) {
-        console.log(err)
-        if (err.response.status === 401) {
-          form.setStatus({error: 'Authorization needed'})
-        }
         form.setFieldError('email', err.response.data.data.email[0]);
       }
       form.setStatus({loading: false});

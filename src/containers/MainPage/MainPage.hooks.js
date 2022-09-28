@@ -21,7 +21,7 @@ export const useAddTodoModal = () => {
     >
       <div className='flex flex-col'>
         <div className='flex justify-between'>
-          <h2>{currentItem ? 'Edit To Do Item' : 'New To Do Item'}</h2>
+          <h2 className='font-semibold mb-3'>{currentItem ? 'Edit To Do Item' : 'New To Do Item'}</h2>
           <button onClick={closeModal}>X</button>
         </div>
 

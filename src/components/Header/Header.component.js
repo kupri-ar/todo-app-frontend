@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import api from "../../services/api";
-import {clearAccessToken, setAccessToken} from "../../services/localStorage";
+import {clearAccessToken} from "../../services/localStorage";
 import {useDispatch, useSelector} from "react-redux";
 import {setCurrentUser} from "../../store/UserData.reducer";
 import Button from "../Button/Button.component";
